@@ -2,7 +2,7 @@ package bookshop.dto;
 
 import java.math.BigDecimal;
 
-public record CreateBookRequestDto(
+public record UpdateBookRequestDto(
         String title,
         String author,
         String isbn,
