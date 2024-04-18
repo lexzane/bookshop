@@ -6,33 +6,33 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import java.math.BigDecimal;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.Data;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
 @Entity
-@Getter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@ToString
-@EqualsAndHashCode
+@Data
+@SQLRestriction("is_deleted=false")
+@SQLDelete(sql = "UPDATE books SET is_deleted = true WHERE id=?")
+@Table(name = "books")
 public class Book {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
-    @Column(nullable = false)
+    @Column(name = "title", nullable = false)
     private String title;
-    @Column(nullable = false)
+    @Column(name = "author", nullable = false)
     private String author;
-    @Column(unique = true, nullable = false)
+    @Column(name = "isbn", unique = true, nullable = false)
     private String isbn;
-    @Column(nullable = false)
+    @Column(name = "price", nullable = false)
     private BigDecimal price;
+    @Column(name = "description")
     private String description;
+    @Column(name = "cover_image")
     private String coverImage;
+    @Column(name = "is_deleted", nullable = false)
+    private boolean isDeleted = false;
 }
