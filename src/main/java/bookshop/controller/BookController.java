@@ -5,6 +5,7 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import bookshop.dto.BookDto;
+import bookshop.dto.BookSearchParameters;
 import bookshop.dto.CreateBookRequestDto;
 import bookshop.dto.UpdateBookRequestDto;
 import bookshop.service.BookService;
@@ -34,6 +35,11 @@ public class BookController {
     @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
     public BookDto getBookById(@PathVariable final Long id) {
         return bookService.findById(id);
+    }
+
+    @GetMapping(value = "/search", produces = APPLICATION_JSON_VALUE)
+    public List<BookDto> searchBooks(final BookSearchParameters searchParameters) {
+        return bookService.search(searchParameters);
     }
 
     @ResponseStatus(CREATED)
