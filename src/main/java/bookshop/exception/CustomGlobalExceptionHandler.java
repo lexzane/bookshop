@@ -1,11 +1,8 @@
 package bookshop.exception;
 
 import static org.apache.commons.lang3.StringUtils.SPACE;
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 import jakarta.validation.ConstraintViolationException;
-import java.time.LocalDateTime;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.http.HttpHeaders;
@@ -22,10 +19,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @ControllerAdvice
 public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler {
-    private static final String ERRORS_PROPERTY = "errors";
-    private static final String TIMESTAMP_PROPERTY = "timestamp";
-    private static final String STATUS_PROPERTY = "status";
-
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
             @NonNull final MethodArgumentNotValidException ex,
@@ -33,13 +26,11 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
             @NonNull final HttpStatusCode status,
             @NonNull final WebRequest request
     ) {
-        final LinkedHashMap<String, Object> body = new LinkedHashMap<>();
-        body.put(TIMESTAMP_PROPERTY, LocalDateTime.now());
-        body.put(STATUS_PROPERTY, status);
         final List<String> errors = ex.getBindingResult().getAllErrors().stream()
                 .map(this::buildErrorMessage)
                 .collect(Collectors.toList());
-        body.put(ERRORS_PROPERTY, errors);
+        final CustomGlobalExceptionBody<List<String>> body =
+                CustomGlobalExceptionBody.build(errors);
         return new ResponseEntity<>(body, headers, status);
     }
 
@@ -47,11 +38,9 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
     private ResponseEntity<Object> handleConstraintViolation(
             final ConstraintViolationException ex
     ) {
-        final LinkedHashMap<String, Object> body = new LinkedHashMap<>();
-        body.put(TIMESTAMP_PROPERTY, LocalDateTime.now());
-        body.put(STATUS_PROPERTY, BAD_REQUEST);
-        body.put(ERRORS_PROPERTY, ex.getMessage());
-        return new ResponseEntity<>(body, BAD_REQUEST);
+        final CustomGlobalExceptionBody<String> body =
+                CustomGlobalExceptionBody.build(ex.getMessage());
+        return new ResponseEntity<>(body, body.status());
     }
 
     private String buildErrorMessage(final ObjectError error) {
