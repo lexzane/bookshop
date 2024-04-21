@@ -1,8 +1,10 @@
 package bookshop.dto;
 
+import jakarta.validation.constraints.Size;
+
 public record BookSearchParameters(
-        String[] titles,
-        String[] authors,
-        String[] prices
+        @Size(min = 1) String[] titles,
+        @Size(min = 1) String[] authors,
+        @Size(min = 1) String[] prices
 ) {
 }
