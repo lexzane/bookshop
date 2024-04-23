@@ -4,11 +4,11 @@ import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-import bookshop.dto.BookDto;
-import bookshop.dto.BookSearchParameters;
-import bookshop.dto.CreateBookRequestDto;
-import bookshop.dto.UpdateBookRequestDto;
-import bookshop.service.BookService;
+import bookshop.dto.book.BookDto;
+import bookshop.dto.book.BookSearchParameters;
+import bookshop.dto.book.CreateBookRequestDto;
+import bookshop.dto.book.UpdateBookRequestDto;
+import bookshop.service.book.BookService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;

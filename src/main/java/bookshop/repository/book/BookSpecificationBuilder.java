@@ -4,7 +4,7 @@ import static bookshop.repository.book.BookSpecificationType.AUTHOR;
 import static bookshop.repository.book.BookSpecificationType.PRICE;
 import static bookshop.repository.book.BookSpecificationType.TITLE;
 
-import bookshop.dto.BookSearchParameters;
+import bookshop.dto.book.BookSearchParameters;
 import bookshop.model.Book;
 import bookshop.repository.SpecificationBuilder;
 import bookshop.repository.SpecificationProviderManager;
