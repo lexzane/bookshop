@@ -35,7 +35,7 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
     }
 
     @ExceptionHandler({ConstraintViolationException.class, RegistrationException.class})
-    private ResponseEntity<Object> handleConstraintViolation(final Exception ex) {
+    private ResponseEntity<Object> handleCommonException(final Exception ex) {
         return buildResponse(CustomGlobalExceptionBody.build(ex.getMessage()));
     }
 
