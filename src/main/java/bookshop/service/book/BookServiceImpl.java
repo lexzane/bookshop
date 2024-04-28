@@ -1,6 +1,7 @@
 package bookshop.service.book;
 
 import bookshop.dto.book.BookDto;
+import bookshop.dto.book.BookDtoWithoutCategoryIds;
 import bookshop.dto.book.BookSearchParameters;
 import bookshop.dto.book.CreateBookRequestDto;
 import bookshop.dto.book.UpdateBookRequestDto;
@@ -10,7 +11,6 @@ import bookshop.model.Book;
 import bookshop.repository.book.BookRepository;
 import bookshop.repository.book.BookSpecificationBuilder;
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -33,7 +33,7 @@ public class BookServiceImpl implements BookService {
     public List<BookDto> findAll(final Pageable pageable) {
         return bookRepository.findAll(pageable).stream()
                 .map(bookMapper::toDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
@@ -41,21 +41,21 @@ public class BookServiceImpl implements BookService {
         final Specification<Book> specification = bookSpecificationBuilder.build(searchParameters);
         return bookRepository.findAll(specification).stream()
                 .map(bookMapper::toDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
     public BookDto findById(final Long id) {
-        return bookRepository.findById(id)
+        return bookRepository.findFetchCategoriesById(id)
                 .map(bookMapper::toDto)
                 .orElseThrow(() ->
-                        new EntityNotFoundException("Couldn't get book from DB by id: " + id));
+                        new EntityNotFoundException("Couldn't get book from DB by id=" + id));
     }
 
     @Override
     public void updateById(final Long id, final UpdateBookRequestDto bookRequestDto) {
         final Book book = bookRepository.findById(id).orElseThrow(() ->
-                new EntityNotFoundException("Couldn't get book from DB by id: " + id));
+                new EntityNotFoundException("Couldn't get book from DB by id=" + id));
         bookMapper.updateModelFromDto(book, bookRequestDto);
         bookRepository.save(book);
     }
@@ -63,5 +63,12 @@ public class BookServiceImpl implements BookService {
     @Override
     public void deleteById(final Long id) {
         bookRepository.deleteById(id);
+    }
+
+    @Override
+    public List<BookDtoWithoutCategoryIds> findAllByCategoryId(final Long categoryId) {
+        return bookRepository.findAllByCategoryId(categoryId).stream()
+                .map(bookMapper::toDtoWithoutCategories)
+                .toList();
     }
 }

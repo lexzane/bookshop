@@ -1,6 +1,7 @@
 package bookshop.service.book;
 
 import bookshop.dto.book.BookDto;
+import bookshop.dto.book.BookDtoWithoutCategoryIds;
 import bookshop.dto.book.BookSearchParameters;
 import bookshop.dto.book.CreateBookRequestDto;
 import bookshop.dto.book.UpdateBookRequestDto;
@@ -19,4 +20,6 @@ public interface BookService {
     void updateById(Long id, UpdateBookRequestDto bookRequestDto);
 
     void deleteById(Long id);
+
+    List<BookDtoWithoutCategoryIds> findAllByCategoryId(Long categoryId);
 }
