@@ -6,11 +6,13 @@ import bookshop.dto.book.CreateBookRequestDto;
 import bookshop.dto.book.UpdateBookRequestDto;
 import bookshop.model.Book;
 import bookshop.model.Category;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.Named;
 
 @Mapper(componentModel = "spring")
 public interface BookMapper {
@@ -48,5 +50,12 @@ public interface BookMapper {
         book.setCategories(requestDto.categoryIds().stream()
                 .map(Category::new)
                 .collect(Collectors.toSet()));
+    }
+
+    @Named("bookFromId")
+    default Book bookFromId(final Long id) {
+        return Optional.ofNullable(id)
+                .map(Book::new)
+                .orElse(null);
     }
 }

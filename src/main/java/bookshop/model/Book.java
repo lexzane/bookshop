@@ -15,12 +15,14 @@ import java.util.HashSet;
 import java.util.Set;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
 @Entity
 @Data
+@NoArgsConstructor
 @SQLRestriction("is_deleted=false")
 @SQLDelete(sql = "UPDATE books SET is_deleted = true WHERE id=?")
 @Table(name = "books")
@@ -51,4 +53,8 @@ public class Book {
     private Set<Category> categories = new HashSet<>();
     @Column(name = "is_deleted", nullable = false)
     private boolean isDeleted = false;
+
+    public Book(Long id) {
+        this.id = id;
+    }
 }
