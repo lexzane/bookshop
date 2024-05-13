@@ -1,14 +1,17 @@
 package bookshop.exception;
 
 import static org.apache.commons.lang3.StringUtils.SPACE;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
 
 import jakarta.validation.ConstraintViolationException;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -34,9 +37,19 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
         return new ResponseEntity<>(body, headers, status);
     }
 
-    @ExceptionHandler({ConstraintViolationException.class, RegistrationException.class})
+    @ExceptionHandler({
+            EntityNotFoundException.class,
+            ConstraintViolationException.class,
+            RegistrationException.class,
+            DataIntegrityViolationException.class
+    })
     private ResponseEntity<Object> handleCommonException(final Exception ex) {
         return buildResponse(CustomGlobalExceptionBody.build(ex.getMessage()));
+    }
+
+    @ExceptionHandler({AccessDeniedException.class})
+    private ResponseEntity<Object> handleAccessDenied(final AccessDeniedException ex) {
+        return buildResponse(CustomGlobalExceptionBody.build(FORBIDDEN, ex.getMessage()));
     }
 
     private ResponseEntity<Object> buildResponse(final CustomGlobalExceptionBody<String> body) {

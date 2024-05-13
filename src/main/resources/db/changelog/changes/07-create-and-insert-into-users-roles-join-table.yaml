@@ -1,0 +1,66 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-users-roles-join-table
+      author: bookshop
+      changes:
+        - createTable:
+            tableName: users_roles
+            columns:
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_user
+                    references: users(id)
+                    nullable: false
+              - column:
+                  name: role_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_role
+                    references: roles(id)
+                    nullable: false
+        - addPrimaryKey:
+            tableName: users_roles
+            columnNames: user_id, role_id
+            constraintName: pk_users_roles
+      rollback:
+        - dropTable:
+            tableName: users_roles
+  - changeSet:
+      id: insert-users-roles
+      author: bookshop
+      changes:
+        - insert:
+            tableName: users_roles
+            columns:
+              - column: {
+                name: user_id,
+                valueComputed: "(SELECT u.id FROM users u WHERE u.email = 'john.doe@example.com')"
+              }
+              - column: {
+                name: role_id,
+                valueComputed: "(SELECT r.id FROM roles r WHERE r.name = 'ADMIN')"
+              }
+        - insert:
+            tableName: users_roles
+            columns:
+              - column: {
+                name: user_id,
+                valueComputed: "(SELECT u.id FROM users u WHERE u.email = 'alice.clark@example.com')"
+              }
+              - column: {
+                name: role_id,
+                valueComputed: "(SELECT r.id FROM roles r WHERE r.name = 'USER')"
+              }
+      rollback:
+        - sql: {
+          sql:
+            DELETE FROM users_roles ur 
+            WHERE ur.user_id = (SELECT u.id FROM users u WHERE u.email = 'john.doe@example.com')
+            AND (SELECT r.id FROM roles r WHERE r.name = 'ADMIN');
+            
+            DELETE FROM users_roles ur 
+            WHERE ur.user_id = (SELECT u.id FROM users u WHERE u.email = 'alice.clark@example.com')
+            AND (SELECT r.id FROM roles r WHERE r.name = 'USER');
+        }

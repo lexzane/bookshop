@@ -1,0 +1,58 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-users
+      author: bookshop
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column: {
+                name: email,
+                value: 'john.doe@example.com'
+              }
+              - column: {
+                name: password,
+                value: '$2a$10$JO/rXN.2k5UC0j7PJow.a.Q6Vl571sYDWjasJwGVW.hNXUcWF9.XW'
+              }
+              - column: {
+                name: first_name,
+                value: 'John'
+              }
+              - column: {
+                name: last_name,
+                value: 'Doe'
+              }
+              - column: {
+                name: shipping_address,
+                value: '121 Main St, City, Country'
+              }
+        - insert:
+            tableName: users
+            columns:
+              - column: {
+                name: email,
+                value: 'alice.clark@example.com'
+              }
+              - column: {
+                name: password,
+                value: '$2a$10$JO/rXN.2k5UC0j7PJow.a.Q6Vl571sYDWjasJwGVW.hNXUcWF9.XW'
+              }
+              - column: {
+                name: first_name,
+                value: 'Alice'
+              }
+              - column: {
+                name: last_name,
+                value: 'Clark'
+              }
+              - column: {
+                name: shipping_address,
+                value: '123 Main St, City, Country'
+              }
+      rollback:
+        - delete:
+            tableName: users
+            where: email='john.doe@example.com'
+        - delete:
+            tableName: users
+            where: email='alice.clark@example.com'
