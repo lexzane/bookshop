@@ -1,0 +1,29 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-books-categories-join-table
+      author: bookshop
+      changes:
+        - createTable:
+            tableName: books_categories
+            columns:
+              - column:
+                  name: book_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_book
+                    references: books(id)
+                    nullable: false
+              - column:
+                  name: category_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_category
+                    references: categories(id)
+                    nullable: false
+        - addPrimaryKey:
+            tableName: books_categories
+            columnNames:  book_id, category_id
+            constraintName: pk_books_categories
+      rollback:
+        - dropTable:
+            tableName: books_categories
