@@ -20,6 +20,10 @@ databaseChangeLog:
                     foreignKeyName: fk_role
                     references: roles(id)
                     nullable: false
+        - addPrimaryKey:
+            tableName: users_roles
+            columnNames: user_id, role_id
+            constraintName: pk_users_roles
       rollback:
         - dropTable:
             tableName: users_roles
