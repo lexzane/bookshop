@@ -1,0 +1,23 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-carts
+      author: bookshop
+      changes:
+        - insert:
+            tableName: carts
+            columns:
+              - column: {
+                name: id,
+                value: '1'
+              }
+              - column: {
+                name: user_id,
+                valueComputed: "(SELECT u.id FROM users u WHERE u.email = 'alice.clark@example.com')"
+              }
+      rollback:
+        - delete:
+              tableName: cart_items
+              where: cart_id='1'
+        - delete:
+            tableName: carts
+            where: id='1'
