@@ -1,9 +1,9 @@
-package bookshop.service;
+package bookshop.service.book;
 
-import bookshop.dto.BookDto;
-import bookshop.dto.BookSearchParameters;
-import bookshop.dto.CreateBookRequestDto;
-import bookshop.dto.UpdateBookRequestDto;
+import bookshop.dto.book.BookDto;
+import bookshop.dto.book.BookSearchParameters;
+import bookshop.dto.book.CreateBookRequestDto;
+import bookshop.dto.book.UpdateBookRequestDto;
 import bookshop.exception.EntityNotFoundException;
 import bookshop.mapper.BookMapper;
 import bookshop.model.Book;
