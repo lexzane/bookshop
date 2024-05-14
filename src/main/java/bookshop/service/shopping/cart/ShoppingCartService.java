@@ -2,6 +2,7 @@ package bookshop.service.shopping.cart;
 
 import bookshop.dto.cart.item.CreateCartItemRequestDto;
 import bookshop.dto.shopping.cart.ShoppingCartDto;
+import bookshop.model.ShoppingCart;
 import bookshop.model.User;
 
 public interface ShoppingCartService {
@@ -10,4 +11,6 @@ public interface ShoppingCartService {
     ShoppingCartDto findByUser(String email);
 
     void addCartItem(String email, CreateCartItemRequestDto requestDto);
+
+    void clear(ShoppingCart shoppingCart);
 }
