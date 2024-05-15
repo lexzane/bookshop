@@ -39,6 +39,7 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
 
     @ExceptionHandler({
             EntityNotFoundException.class,
+            OrderValidationException.class,
             ConstraintViolationException.class,
             RegistrationException.class,
             DataIntegrityViolationException.class
