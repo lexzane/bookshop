@@ -1,0 +1,39 @@
+services:
+  mysql-db:
+    platform: linux/arm64
+    image: mysql
+    container_name: mysql-container
+    env_file: ./.env
+    environment:
+      - MYSQL_USER=$MYSQLDB_USER
+      - MYSQL_ROOT_PASSWORD=$MYSQLDB_ROOT_PASSWORD
+      - MYSQL_PASSWORD=$MYSQLDB_ROOT_PASSWORD
+      - MYSQL_DATABASE=$MYSQLDB_DATABASE
+    ports:
+      - $MYSQLDB_LOCAL_PORT:$MYSQLDB_DOCKER_PORT
+    restart: always
+    healthcheck:
+      test: [ 'CMD', 'mysqladmin', 'ping', '-h', 'mysql-db' ]
+      timeout: 20s
+      retries: 10
+  app:
+    depends_on:
+      mysql-db:
+        condition: service_healthy
+    links:
+      - mysql-db
+    restart: on-failure
+    image: bookshop
+    container_name: bookshop-container
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file: ./.env
+    ports:
+      - $SPRING_LOCAL_PORT:$SPRING_DOCKER_PORT
+      - $DEBUG_PORT:$DEBUG_PORT
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-container:$MYSQLDB_DOCKER_PORT/$MYSQLDB_DATABASE?serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: $SPRING_ROOT_USER
+      SPRING_DATASOURCE_PASSWORD: $MYSQLDB_ROOT_PASSWORD
+      JAVA_TOOL_OPTIONS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:$DEBUG_PORT
