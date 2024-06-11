@@ -1,6 +1,5 @@
-package org.example.bookshop;
+package bookshop;
 
-import bookshop.BookshopApplication;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 

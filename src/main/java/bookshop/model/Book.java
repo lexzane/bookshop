@@ -17,11 +17,13 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import lombok.experimental.Accessors;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
 @Entity
 @Data
+@Accessors(chain = true)
 @NoArgsConstructor
 @SQLRestriction("is_deleted=false")
 @SQLDelete(sql = "UPDATE books SET is_deleted = true WHERE id=?")
